@@ -43,16 +43,27 @@ __device__ float3 computeCov2D(const float3& mean, float focal_x, float focal_y,
 		viewmatrix[2], viewmatrix[6], viewmatrix[10]);
 
 	// Begin Code 2.4
-	float z = max(t.z, 1e-6f);
-	glm::mat3 J = glm::mat3(
-		1.0f / (tan_fovx * z), 0.0f, -txtz / (tan_fovx * z * z), 
-		0.0f, 1.0f / (tan_fovy * z), -tytz / (tan_fovy * z * z), 
-		0.0f, 0.0f, 1.0f);
-	glm::mat3 T = glm::mat3(
-		0.5f * focal_x, 0.0f, 0.0f, 
-		0.0f, 0.5f * focal_y, 0.0f,
-		0.0f, 0.0f, 1.0f) * J;
-	glm::mat3 cov = T * W * sigma * glm::transpose(W) * glm::transpose(T);
+	// glm::mat3 J = glm::mat3(???)  
+	// glm::mat3 T= ???
+	// glm::mat3 cov=???
+
+	// placeholder
+	glm::mat3 cov = glm::mat3(
+		1,0,0,
+		0,1,0,
+		0,0,1);
+
+	// Begin Code 2.4
+	// float z = max(t.z, 1e-6f);
+	// glm::mat3 J = glm::mat3(
+	// 	1.0f / (tan_fovx * z), 0.0f, -txtz / (tan_fovx * z * z), 
+	// 	0.0f, 1.0f / (tan_fovy * z), -tytz / (tan_fovy * z * z), 
+	// 	0.0f, 0.0f, 1.0f);
+	// glm::mat3 T = glm::mat3(
+	// 	0.5f * focal_x, 0.0f, 0.0f, 
+	// 	0.0f, 0.5f * focal_y, 0.0f,
+	// 	0.0f, 0.0f, 1.0f) * J;
+	// glm::mat3 cov = T * W * sigma * glm::transpose(W) * glm::transpose(T);
 	// End Code 2.4
 
 	// Apply low-pass filter: every Gaussian should be at least
