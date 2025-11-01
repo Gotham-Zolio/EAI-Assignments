@@ -1,0 +1,16 @@
+# 数据与素材
+HW1-3DGS/assets/
+HW1-3DGS/datasets/
+
+# Python 缓存文件
+**/__pycache__/
+*.pyc
+*.pyo
+
+# 编译/构建结果
+HW1-3DGS/submodules/diff-gaussian-rasterization/build/
+HW1-3DGS/submodules/diff-gaussian-rasterization/diff_gaussian_rasterization.egg-info/
+
+# 临时或自动生成的文件夹
+HW1-3DGS/submodules/diff-gaussian-rasterization/third_party/
+
