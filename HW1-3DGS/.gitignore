@@ -1,16 +1,30 @@
+# ---------------------------
 # 数据与素材
+# ---------------------------
 HW1-3DGS/assets/
 HW1-3DGS/datasets/
+cuda_11.8.0_520.61.05_linux.run
 
+# ---------------------------
 # Python 缓存文件
+# ---------------------------
 **/__pycache__/
 *.pyc
 *.pyo
 
-# 编译/构建结果
+# ---------------------------
+# 编译 / 构建结果
+# ---------------------------
 HW1-3DGS/submodules/diff-gaussian-rasterization/build/
-HW1-3DGS/submodules/diff-gaussian-rasterization/diff_gaussian_rasterization.egg-info/
+HW1-3DGS/submodules/diff-gaussian-rasterization/*.egg-info
+HW1-3DGS/submodules/diff-gaussian-rasterization/diff_gaussian_rasterization/_C*.so
 
+# ---------------------------
 # 临时或自动生成的文件夹
+# ---------------------------
 HW1-3DGS/submodules/diff-gaussian-rasterization/third_party/
 
+# ---------------------------
+# 操作系统 / 编辑器生成文件
+# ---------------------------
+.DS_Store
