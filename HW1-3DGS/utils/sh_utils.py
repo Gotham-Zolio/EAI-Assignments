@@ -28,8 +28,10 @@ def eval_sh(deg, sh, dirs):
     
     if deg ==1:
         # Begin code 3.1 ##
-        # todo: add support for 1st-degree SH 
-        # result = result + SH_C1_0 * ??? + SH_C1_1 * ??? + SH_C1_2 * ???
-        pass
+        result += (
+            SH_C1_0 * sh[..., 1] * dirs[..., 1]
+            + SH_C1_1 * sh[..., 2] * dirs[..., 2]
+            + SH_C1_2 * sh[..., 3] * dirs[..., 0]
+        )
         # End code 3.1 ##
     return result
