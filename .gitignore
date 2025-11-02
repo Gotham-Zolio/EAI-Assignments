@@ -1,0 +1,12 @@
+HW1-3DGS/scripts/merge_examples.py
+HW1-3DGS/assets/
+HW1-3DGS/datasets/
+HW1-3DGS/cuda_11.8.0_520.61.05_linux.run
+HW1-3DGS/**/__pycache__/
+HW1-3DGS/*.pyc
+HW1-3DGS/*.pyo
+HW1-3DGS/submodules/diff-gaussian-rasterization/build/
+HW1-3DGS/submodules/diff-gaussian-rasterization/*.egg-info
+HW1-3DGS/submodules/diff-gaussian-rasterization/third_party/
+HW1-3DGS/submodules/diff-gaussian-rasterization/diff_gaussian_rasterization/_C*.so
+HW1-3DGS/.DS_Store
