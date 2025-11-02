@@ -28,11 +28,10 @@ def eval_sh(deg, sh, dirs):
     
     if deg ==1:
         # Begin code 3.1 ##
-        # result += (
-        #     SH_C1_0 * sh[..., 1] * dirs[..., 1]
-        #     + SH_C1_1 * sh[..., 2] * dirs[..., 2]
-        #     + SH_C1_2 * sh[..., 3] * dirs[..., 0]
-        # )
+        result += (
+            SH_C1_0 * sh[..., 1] * dirs[..., 1:2]
+            + SH_C1_1 * sh[..., 2] * dirs[..., 2:3]
+            + SH_C1_2 * sh[..., 3] * dirs[..., 0:1]
+        )
         # End code 3.1 ##
-        pass
     return result
