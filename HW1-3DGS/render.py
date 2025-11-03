@@ -129,9 +129,18 @@ def render_sets(args):
         
         ### Begin Code 3.2 ###
         print("Number of gaussians before pruning: ", gaussians.get_xyz.shape[0])
-        # gaussians.prune_points(...)
+        mode = int(getattr(args, 'prune_mode', 0))
+        th = float(getattr(args, 'prune_threshold', 0.0))
+        if mode == 0:
+            print('No pruning applied')
+        elif mode == 1:
+            print('Pruned gaussians by opacity')
+            gaussians.prune_points(th=th, mode=1)
+        elif mode == 2:
+            print('Pruned gaussians by importance')
+            gaussians.prune_points(th=th, mode=2, cameras=cameras)
         print("Number of gaussians after pruning: ", gaussians.get_xyz.shape[0])
-        ### End code 3.2 ###
+        ### End Code 3.2 ###
         
         bg_color = [0, 0, 0] # Black background for our scene
         background = torch.tensor(bg_color, dtype=torch.float32, device="cuda")
@@ -140,13 +149,13 @@ def render_sets(args):
 
         for idx, view in enumerate(tqdm(cameras, desc="Rendering progress")):
             rendering = render(view, gaussians, background)["render"]
-            img = (rendering.mul(255).add(0.5)).clamp(0, 255).to(torch.uint8).cpu()
-            torchvision.io.write_png(img, os.path.join(render_path, '{0:05d}'.format(idx) + ".png"))
+            torchvision.utils.save_image(rendering, os.path.join(render_path, '{0:05d}'.format(idx) + ".png"))
 
 if __name__ == "__main__":
-    # Set up command line argument parser
     parser = ArgumentParser(description="Testing script parameters")
     parser.add_argument("--model_path","-m", default="assets/gs_cloud.ply",type=str)
     parser.add_argument("--sh_degree", default=1, type=int, help="active SH degree")
+    parser.add_argument("--prune_mode", default=0, type=int, help="prune mode: 0=no prune,1=opacity-only,2=importance-based")
+    parser.add_argument("--prune_threshold", default=0.0, type=float, help="minimum threshold for pruning points")
     args=parser.parse_args()
     render_sets(args)

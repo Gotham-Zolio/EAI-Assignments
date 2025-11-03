@@ -11,10 +11,13 @@
 
 import torch
 import numpy as np
+import math
 from utils.general_utils import inverse_sigmoid
 from torch import nn
 from plyfile import PlyData
+from diff_gaussian_rasterization import GaussianRasterizationSettings, GaussianRasterizer
 from utils.general_utils import strip_symmetric, build_rotmat_from_quat
+from utils.sh_utils import eval_sh
             
 class GaussianModel:
 
@@ -122,13 +125,72 @@ class GaussianModel:
         self._scaling = nn.Parameter(torch.tensor(scales, dtype=torch.float, device="cuda").requires_grad_(True))
         self._rotation = nn.Parameter(torch.tensor(rots, dtype=torch.float, device="cuda").requires_grad_(True))
 
-    def prune_points(self,min_opacity=0.0):
+    def prune_points(self, th=0.0, mode=1, cameras=None):
         ## Begin code 3.2 ##
-        # todo: compute a mask of points with opacity < min_opacity, and remove them from the model.
-        # valid_points_mask = ???
-        valid_points_mask=torch.arange(self._xyz.shape[0]) # placeholder, remove this line
+        opacity = self.get_opacity
+        valid_points_mask = torch.ones((self.get_xyz.shape[0],), dtype=torch.bool, device=self._xyz.device)
+
+        if mode == 1 or cameras is None:
+            with torch.no_grad():
+                valid_points_mask = (opacity.view(-1) > th)
+                if valid_points_mask.sum().item() == 0:
+                    return
+                
+        elif mode == 2:
+            with torch.no_grad():
+                importance = torch.zeros((self.get_xyz.shape[0],), dtype=torch.float32, device=self._xyz.device)
+                means3D = self.get_xyz
+                means2D = torch.zeros((self.get_xyz.shape[0], 3), dtype=self._xyz.dtype, device=self._xyz.device)
+                cov3D_precomp = self.get_covariance(1)
+
+                for cam in cameras:
+                    tanfovx = math.tan(cam.FoVx * 0.5)
+                    tanfovy = math.tan(cam.FoVy * 0.5)
+                    raster_settings = GaussianRasterizationSettings(
+                        image_height=int(cam.image_height),
+                        image_width=int(cam.image_width),
+                        tanfovx=tanfovx,
+                        tanfovy=tanfovy,
+                        bg=torch.tensor([0,0,0], dtype=torch.float32, device=self._xyz.device),
+                        scale_modifier=1.0,
+                        viewmatrix=cam.world_view_transform,
+                        projmatrix=cam.full_proj_transform,
+                        sh_degree=self.active_sh_degree,
+                        campos=cam.camera_center,
+                        prefiltered=False,
+                        debug=False
+                    )
+
+                    # Precompute colors_per_point in this view (same as render path) so rasterizer
+                    # receives exactly one of SHs or precomputed colors.
+                    shs_view = self.get_features.transpose(1, 2).view(-1, 3, (self.max_sh_degree + 1) ** 2)
+                    dir_pp = (means3D - cam.camera_center.repeat(self.get_features.shape[0], 1))
+                    dir_pp_normalized = dir_pp / (dir_pp.norm(dim=1, keepdim=True) + 1e-8)
+                    sh2rgb = eval_sh(self.active_sh_degree, shs_view, dir_pp_normalized)
+                    colors_precomp = torch.clamp_min(sh2rgb + 0.5, 0.0)
+
+                    rasterizer = GaussianRasterizer(raster_settings=raster_settings)
+                    _, radii = rasterizer(
+                        means3D = means3D,
+                        means2D = means2D,
+                        shs = None,
+                        colors_precomp = colors_precomp,
+                        opacities = opacity,
+                        scales = None,
+                        rotations = None,
+                        cov3D_precomp = cov3D_precomp)
+
+                    radii = radii.view(-1)
+                    visible = (radii > 0).float()
+                    area = (torch.pi * (radii ** 2)).float()
+                    importance += (opacity.view(-1) * area * visible)
+
+                cutoff = torch.quantile(importance, th)
+                valid_points_mask = (importance > cutoff)
+                if valid_points_mask.sum().item() == 0:
+                    return
+
         ## End code 3.2 ##
-        
         self._xyz = self._xyz[valid_points_mask]
         self._features_dc = self._features_dc[valid_points_mask]
         self._features_rest = self._features_rest[valid_points_mask]
