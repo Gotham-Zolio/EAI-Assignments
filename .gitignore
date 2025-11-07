@@ -9,4 +9,4 @@ HW1-3DGS/submodules/diff-gaussian-rasterization/build/
 HW1-3DGS/submodules/diff-gaussian-rasterization/*.egg-info
 HW1-3DGS/submodules/diff-gaussian-rasterization/third_party/
 HW1-3DGS/submodules/diff-gaussian-rasterization/diff_gaussian_rasterization/_C*.so
-HW1-3DGS/.DS_Store{要添加的内容_例如_node_modules/}
+HW1-3DGS/scripts/
