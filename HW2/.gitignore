@@ -1,0 +1,27 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+.vscode
+logs
+assets/Robots
+answer
+
+# HW2 specific
+part2/*.npz
+part2/*.mp4
+part3/logs/
+part3/*.mp4
+part3/*.npz
+
+# Large assets
+urdf/
+!urdf/README.md
+assets/
+
