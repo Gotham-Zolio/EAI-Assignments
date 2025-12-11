@@ -1,12 +1,47 @@
-HW1-3DGS/scripts/merge_examples.py
+# General Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+venv/
+.env
+*.egg-info/
+build/
+dist/
+
+# General OS
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# LaTeX
+*.aux
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.log
+*.out
+*.toc
+
+# HW1-3DGS
 HW1-3DGS/assets/
 HW1-3DGS/datasets/
+HW1-3DGS/render_results/
 HW1-3DGS/cuda_11.8.0_520.61.05_linux.run
-HW1-3DGS/**/__pycache__/
-HW1-3DGS/*.pyc
-HW1-3DGS/*.pyo
 HW1-3DGS/submodules/diff-gaussian-rasterization/build/
-HW1-3DGS/submodules/diff-gaussian-rasterization/*.egg-info
 HW1-3DGS/submodules/diff-gaussian-rasterization/third_party/
 HW1-3DGS/submodules/diff-gaussian-rasterization/diff_gaussian_rasterization/_C*.so
-HW1-3DGS/scripts/
+
+# HW2-Simulation
+HW2-Simulation/logs/
+HW2-Simulation/**/maze_outputs/
+HW2-Simulation/part2/*.npz
+
+# HW3-MBRL
+HW3-MBRL/logs/
+HW3-MBRL/outputs/
+HW3-MBRL/runs/
+

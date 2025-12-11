@@ -4,6 +4,7 @@ This repository collects course assignments, code, data pointers, and documentat
 
 ---
 
+
 ## Repository layout (top-level)
 
 - `HW1-3DGS/` — Homework 1: 3D Gaussian Splatting implementation, rendering harness, report and assets.
@@ -14,9 +15,26 @@ This repository collects course assignments, code, data pointers, and documentat
   - `scripts/` — Helper scripts (ignored by git; not tracked). Used for local reproducibility; do not commit secrets here.
   - `render.py`, `gaussian_model.py`, `utils/`, etc. — Core code used to run the pipeline.
 
+- `HW2-Simulation/` — Homework 2: Robotics Simulation Workflow. Simulation, sensor integration, RL training, and maze navigation.
+  - `report/` — LaTeX report and images.
+  - `assets/` — Robot models, maze layouts, and sensor data.
+  - `part1/` — Hello World scene construction (table, robots, objects, camera).
+  - `part2/` — Sensor integration (IMU, LiDAR, Depth Camera) and visualization scripts.
+  - `part3/` — RL locomotion training, evaluation, and maze navigation demo.
+  - `scripts/` — Visualization and helper scripts (e.g., depth_viz.py, lidar_viz.py).
+  - `urdf/` — URDF files for all robots used in simulation.
+  - `go2_env.py`, `go2_train.py`, `go2_eval.py`, `go2_maze.py`, `go2_maze_run.py` — Core code for RL and navigation tasks.
+
+- `HW3-MBRL/` — Homework 3: Model-Based Reinforcement Learning (MBRL) for continuous control.
+  - `src/` — Source code for MBRL algorithms, environment wrappers, and training scripts.
+  - `logs/`, `outputs/`, `runs/` — Training logs, evaluation outputs, and experiment runs (ignored by git).
+  - `EAI_hw3.pdf` — Assignment report.
+  - `cfg.yaml` — Configuration file for experiments.
+  - `requirements.txt` — Python dependencies for HW3.
+
 - `requirements.txt` — Python dependencies used across assignments (try to keep these minimal and pinned per-assignment where necessary).
 
-- (future) `HW2-.../`, `HW3-.../` — Additional homework folders will follow the same structure.
+---
 
 ---
 
@@ -78,6 +96,51 @@ python HW1-3DGS\render.py --model_path HW1-3DGS\assets\gs_cloud.ply --sh_degree 
   4. Save renders into `HW1-3DGS/renders/` and compute metrics (PSNR/SSIM) against the provided ground truth if available.
 
 - Reproducibility: record the git commit hash used for experiments and the exact command-line parameters in the report.
+
+---
+
+
+## HW2-specific notes (Robotics Simulation Workflow)
+
+- Report: `HW2/report/report.tex` and generated PDF. Contains scene setup, sensor integration, RL training, and navigation analysis.
+- Key implementation files:
+  - `HW2/part1/hello_world.py` — Genesis scene construction (table, robots, objects, camera).
+  - `HW2/part2/imu.py`, `HW2/part2/lidar.py` — Sensor integration and data recording.
+  - `HW2/part3/go2_env.py` — RL environment for Go2 quadruped.
+  - `HW2/part3/go2_train.py` — PPO training script for locomotion policy.
+  - `HW2/part3/go2_eval.py` — Policy evaluation and velocity tracking plots/videos.
+  - `HW2/part3/go2_maze.py`, `HW2/part3/go2_maze_run.py` — Maze environment and navigation demo.
+  - `HW2/scripts/depth_viz.py`, `HW2/scripts/lidar_viz.py` — Visualization of sensor data.
+
+- Typical workflow:
+  1. Run `part1/hello_world.py` to construct and record the basic scene.
+  2. Use `part2/imu.py` and `part2/lidar.py` to attach sensors and record data; visualize with provided scripts.
+  3. Train the RL policy with `part3/go2_train.py --max_iterations 1001`.
+  4. Evaluate the trained policy with `part3/go2_eval.py --ckpt 1000` and generate plots/videos.
+  5. Run the maze navigation demo with `part3/go2_maze_run.py --ckpt 1000` to record top-down, depth, and LiDAR videos.
+
+- Reproducibility: record the git commit hash and all command-line parameters in the report. All scripts use Tyro CLI for configuration.
+
+---
+
+## HW3-specific notes (Model-Based Reinforcement Learning)
+
+- Report: `HW3-MBRL/EAI_hw3.pdf` — Contains methodology, experiment results, and analysis for model-based RL tasks.
+- Key implementation files:
+  - `HW3-MBRL/src/agent.py` — MBRL agent implementation (e.g., PETS, MBPO, or similar algorithms).
+  - `HW3-MBRL/src/env.py` — Environment wrappers and utilities for continuous control tasks.
+  - `HW3-MBRL/src/train.py` — Training script for running experiments.
+  - `HW3-MBRL/src/logger.py`, `helper.py` — Logging and helper utilities.
+  - `HW3-MBRL/cfg.yaml` — Experiment configuration (hyperparameters, environment selection, etc.).
+  - `HW3-MBRL/requirements.txt` — Python dependencies for HW3.
+
+- Typical workflow:
+  1. Edit `cfg.yaml` to set up experiment parameters (environment, agent, training steps, etc.).
+  2. Run `python src/train.py --config cfg.yaml` to start training.
+  3. Monitor logs and outputs in `logs/`, `outputs/`, or `runs/` directories.
+  4. Analyze results and plots for evaluation.
+
+- Reproducibility: record the git commit hash and all command-line/configuration parameters in the report. Use provided scripts and config files for consistent experiments.
 
 ---
 

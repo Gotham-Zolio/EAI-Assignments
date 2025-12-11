@@ -139,9 +139,9 @@ def get_cfgs():
     }
     command_cfg = {
         "num_commands": 3,
-        "lin_vel_x_range": [-1, 1], #TODO: fill in the linear x velocity command range
-        "lin_vel_y_range": [-1, 1], #TODO: fill in the linear y velocity command range
-        "ang_vel_range": [-1, 1], #TODO: fill in the angular velocity command range
+        "lin_vel_x_range": [-1.0, 1.0], #TODO: fill in the linear x velocity command range
+        "lin_vel_y_range": [-0.5, 0.5], #TODO: fill in the linear y velocity command range
+        "ang_vel_range": [-1.0, 1.0], #TODO: fill in the angular velocity command range
     }
 
     return env_cfg, obs_cfg, reward_cfg, command_cfg
